@@ -10,6 +10,6 @@ a.output.parent.mkdir(parents=True,exist_ok=True)
 manifest=[]
 with zipfile.ZipFile(a.output,'w',compression=zipfile.ZIP_DEFLATED) as z:
  for f in files:
-  name=f'realme-fullscreen-1.0/{f.relative_to(root).as_posix()}';data=f.read_bytes();z.writestr(name,data);manifest.append(f'{hashlib.sha256(data).hexdigest()}  {name}')
- z.writestr('realme-fullscreen-1.0/EXPORT-SHA256SUMS','\n'.join(manifest)+'\n')
+  name=f'realme-fullscreen-1.1/{f.relative_to(root).as_posix()}';data=f.read_bytes();z.writestr(name,data);manifest.append(f'{hashlib.sha256(data).hexdigest()}  {name}')
+ z.writestr('realme-fullscreen-1.1/EXPORT-SHA256SUMS','\n'.join(manifest)+'\n')
 print(f'{len(files)} source files; SHA256 {hashlib.sha256(a.output.read_bytes()).hexdigest()}')

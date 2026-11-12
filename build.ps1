@@ -36,9 +36,9 @@ try {
   & keytool -genkeypair -keystore $key -storepass:env FULLSCREEN_BUILD_PASSWORD -keypass:env FULLSCREEN_BUILD_PASSWORD -alias fullscreen -keyalg RSA -keysize 2048 -validity 3650 -dname 'CN=Realme Fullscreen Local Build'
   Check 'signing key'
  }
- & java -jar (Join-Path $bt 'lib/apksigner.jar') sign --ks $key --ks-key-alias fullscreen --ks-pass env:FULLSCREEN_BUILD_PASSWORD --key-pass env:FULLSCREEN_BUILD_PASSWORD --out (Join-Path $out 'realme-fullscreen-1.0.apk') (Join-Path $out 'aligned.apk')
+ & java -jar (Join-Path $bt 'lib/apksigner.jar') sign --ks $key --ks-key-alias fullscreen --ks-pass env:FULLSCREEN_BUILD_PASSWORD --key-pass env:FULLSCREEN_BUILD_PASSWORD --out (Join-Path $out 'realme-fullscreen-1.1.apk') (Join-Path $out 'aligned.apk')
  Check 'sign'
- & java -jar (Join-Path $bt 'lib/apksigner.jar') verify --verbose (Join-Path $out 'realme-fullscreen-1.0.apk')
+ & java -jar (Join-Path $bt 'lib/apksigner.jar') verify --verbose (Join-Path $out 'realme-fullscreen-1.1.apk')
  Check 'verify'
 } finally { Remove-Item Env:FULLSCREEN_BUILD_PASSWORD }
-Get-FileHash (Join-Path $out 'realme-fullscreen-1.0.apk') -Algorithm SHA256
+Get-FileHash (Join-Path $out 'realme-fullscreen-1.1.apk') -Algorithm SHA256

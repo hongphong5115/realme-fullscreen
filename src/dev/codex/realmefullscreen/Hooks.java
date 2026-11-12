@@ -124,16 +124,9 @@ public final class Hooks implements IXposedHookLoadPackage {
   XposedHelpers.findAndHookMethod(android.view.ViewGroup.class,"dispatchDraw",Canvas.class,new XC_MethodHook(){@Override protected void beforeHookedMethod(MethodHookParam p){
    if(bar.isInstance(p.thisObject)&&uiHidden((View)p.thisObject))p.setResult(null);
   }});
-  XposedHelpers.findAndHookMethod(android.view.ViewGroup.class,"drawChild",Canvas.class,View.class,long.class,new XC_MethodHook(){@Override protected void beforeHookedMethod(MethodHookParam p){
-   View child=(View)p.args[1];if(child.getId()==View.NO_ID)return;
-   try{
-    String id=child.getResources().getResourceEntryName(child.getId());
-    if(!(id.equals("quick_qs_status_icons")||id.equals("statusIcons")||id.equals("batteryRemainingIcon")||id.equals("clock")||id.equals("carrier_group")))return;
-    if(!uiHidden(child))return;
-    android.view.ViewParent parent=child.getParent();
-    while(parent instanceof View){String name=parent.getClass().getName();if(name.contains(".qs.")||name.contains("QuickStatusBarHeader")){p.setResult(false);return;}parent=parent.getParent();}
-   }catch(android.content.res.Resources.NotFoundException ignored){}
-  }});
+  // QS/notification headers are separate from PhoneStatusBarView. Leave their
+  // icons, clock and carrier rendering entirely under the native ROM lifecycle.
+  // Closing the shade therefore needs no visibility reset or expansion polling.
   Class<?> queue=XposedHelpers.findClass("com.android.systemui.statusbar.CommandQueue",cl);
   hook(queue,"onSystemBarAttributesChanged",new XC_MethodHook(){@Override protected void beforeHookedMethod(MethodHookParam p){
    for(Object arg:p.args)if(arg instanceof String&&!"com.android.systemui".equals(arg)&&!arg.equals(topPackage)){topPackage=(String)arg;Log.i(TAG,"SystemUI controlling package="+topPackage);}

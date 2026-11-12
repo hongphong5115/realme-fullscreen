@@ -22,7 +22,7 @@ public final class MainActivity extends Activity {
   prefs=Config.local(this);
   if(!prefs.contains("enabled"))prefs.edit().putBoolean("enabled",true).putBoolean("hide",true).putBoolean("cutout",true).commit();
   LinearLayout root=new LinearLayout(this);root.setOrientation(1);int pad=(int)(16*getResources().getDisplayMetrics().density);root.setPadding(pad,pad,pad,0);
-  TextView title=new TextView(this);title.setText("Ẩn thanh trạng thái realme 1.0");title.setTextSize(23);root.addView(title);
+  TextView title=new TextView(this);title.setText("Ẩn thanh trạng thái realme 1.1");title.setTextSize(23);root.addView(title);
   addSwitch(root,"Bật module","enabled");addSwitch(root,"Ẩn hàng giờ / pin / sóng","hide");addSwitch(root,"Tràn vùng camera khi ngang (cả Gboard)","cutout");
   TextView help=new TextView(this);help.setText("Áp dụng cho app và màn hình chính; giữ màn hình khóa. Kéo mép trên vẫn mở thông báo. Sau khi đổi cấu hình, mở lại app; thay đổi hook framework/scope cần reboot. Lỗ camera vẫn che nội dung tại vị trí vật lý.");root.addView(help);
   diagnostics=new TextView(this);root.addView(diagnostics);updateDiagnostics();

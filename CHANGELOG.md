@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1 — 2026-11-13
+
+- Khôi phục icon pin/sóng/Wi-Fi khi mở bảng thông báo hoặc Cài đặt nhanh.
+- Bỏ hook vẽ con của QS, giữ header theo ROM; hàng trạng thái ngoài bảng vẫn ẩn.
+- Giữ nguyên hook framework/cutout/IME và cấu hình hiện có.
+- Đã kiểm tra dọc trên máy thật; chi tiết và giới hạn trong TESTING.md.
+
 ## 1.0 — 2026-11-13
 
 - Module độc lập dev.codex.realmefullscreen cho Android 13/Oplus.

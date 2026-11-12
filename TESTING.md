@@ -51,3 +51,15 @@ Thiết bị realme RMX3370, Android 13 / SDK33, ROM RMX3370_13.1.0.601(CN01), A
 enabled=true, hide=true, cutout=true; Chrome không còn ngoại lệ. Adapter cũ `dev.phong.edgetoedge` bị tắt trong LSPosed nhưng APK và dữ liệu được giữ nguyên. Scope mới: System Framework (`system`), SystemUI, Launcher, Gboard, Chrome, Cài đặt, Facebook và chính module. Các module khác không bị đổi enabled/scope.
 
 APK SHA256: `be3cb7e2a77023becda8cf3cca2ebf73195c0617b08a9584eb831bca624a9bc8`.
+
+
+## Bản 1.1 — khôi phục icon trong bảng kéo xuống (2026-11-13)
+
+- Vấn đề: bản 1.0 chặn vẽ cả icon pin/sóng/Wi-Fi trong header thông báo và Cài đặt nhanh.
+- Nguyên nhân: hook ViewGroup.drawChild lọc các ID QS khi cấu hình hide đang bật, không phân biệt chúng với hàng trạng thái ngoài bảng.
+- Sửa: bỏ hoàn toàn hook drawChild của QS; giữ riêng PhoneStatusBarView.dispatchDraw cho hàng trạng thái ngoài bảng. Header QS dùng vòng đời hiển thị gốc của ROM, không thêm polling hay ép visibility.
+- Build/chữ ký và verify.py: đạt; cài cập nhật trên RMX3370 thành công, versionName 1.1/versionCode 2, giữ dữ liệu cấu hình.
+- Đã xem ảnh chụp thật ở 4 trạng thái dọc: Home ẩn icon; bảng thông báo hiện pin/sóng/Wi-Fi; QS mở rộng hiện icon; đóng bảng trở lại Home ẩn icon. Có mở ProbeActivity để nạp lại provider sau cập nhật.
+- Khởi động lại riêng SystemUI để nạp hook; không reboot máy. Hai lần restart SystemUI trong đợt này; chưa kiểm thử lại sau reboot hoặc ma trận ngang/Gboard vì hook framework/IME không đổi.
+- Không kiểm thử CTS/Gemini/Wallet hay thay đổi module Cử chỉ realme. Giới hạn kiểm thử bản 1.0 còn giữ nguyên; ảnh/log chỉ lưu cục bộ.
+- APK SHA256: 8dbd32bb68c957c80ec97778b6015b78df27fac445ef1dacd22f194c7ff074a0.
