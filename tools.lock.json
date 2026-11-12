@@ -1,0 +1,6 @@
+[
+  {"file":"platform33.zip","url":"https://dl.google.com/android/repository/platform-33-ext5_r01.zip","sha256":"3d6189a18d0cebd4e518b8728de0e6b940d95c96b57316769dd56ee2d1708d10","extract":"platform33","probe":"platform33/android-33-ext5/android.jar"},
+  {"file":"buildtools34.zip","url":"https://dl.google.com/android/repository/build-tools_r34-windows.zip","sha256":"9be665ad74ef22bf0e489b37db465074484df79b95f26d759945d5c25a47b326","extract":"buildtools34","probe":"buildtools34/android-14/aapt2.exe"},
+  {"file":"r8-current.jar","url":"https://storage.googleapis.com/r8-releases/raw/9.5.29/r8lib.jar","sha256":"f8c762ff84640b10083b934a47278758a7665977e618fab0c927fff00521dea3"},
+  {"file":"xposed-api82.jar","url":"https://api.xposed.info/de/robv/android/xposed/api/82/api-82.jar","sha256":"f48c635f1c7469fdec0e00ad2ea0b7a6b2f5b55065784a35b7ca3a84615e8e25"}
+]

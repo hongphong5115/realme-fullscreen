@@ -1,0 +1,13 @@
+build/
+research/
+.local/
+test-results/
+tools/
+*.jks
+*.db
+*.db-wal
+*.db-shm
+*.log
+*.idsig
+__pycache__/
+*.pyc

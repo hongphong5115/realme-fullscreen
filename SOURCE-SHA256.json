@@ -1,0 +1,12 @@
+{
+  "AndroidManifest.xml": "ddfe659c878c924ae8653d6ca1411765a854e63d194d2479cb98147b289fe4e7",
+  "assets/xposed_init": "dbae2321bf10810e094fa0d3835ab0b0951825bef6385b1e86234b986de9f659",
+  "res/values/arrays.xml": "73a99c07c308b1a54530128a046a79fa2007865a43baba1c43b14230112aeddb",
+  "src/dev/codex/realmefullscreen/Config.java": "df46af9d0ba7676408b4aee459e3f586b72fcd9d022d8e67f9a105473fb7e89e",
+  "src/dev/codex/realmefullscreen/ConfigProvider.java": "26f06149b1cec6a412e69d57b72d9b5bd3fdf41e1e1f97037605bb4400fb0fbe",
+  "src/dev/codex/realmefullscreen/Hooks.java": "57225fdb5a337d1122f8adb5c7ae7c44d6ce8ba265139be091c44e1c4ddbe902",
+  "src/dev/codex/realmefullscreen/MainActivity.java": "906569da50fa4179ec27d8d6fa6de9798a56d77b76fca4238824ab8f38690c03",
+  "src/dev/codex/realmefullscreen/ProbeActivity.java": "3c24e2a4a142a21fc7805705a205efe60eb86521828a7540c9c993d14fbc051b",
+  "src/dev/codex/realmefullscreen/ScopeTool.java": "d2745adf63c8fe6b57363b5da89a86a729f392a1bdbb997070c8c5239b77a046",
+  "tools.lock.json": "224c7ee240a48a35af7c646230f0dcb0f56ab6d15bb88db026a136ff128e1793"
+}
