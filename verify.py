@@ -5,7 +5,7 @@ p=argparse.ArgumentParser();p.add_argument('--apk',type=Path,required=True);a=p.
 root=Path(__file__).resolve().parent
 manifest=ET.parse(root/'AndroidManifest.xml').getroot();ns='{http://schemas.android.com/apk/res/android}'
 assert manifest.get('package')=='dev.codex.realmefullscreen'
-assert manifest.get(ns+'versionName')=='1.1' and manifest.get(ns+'versionCode')=='2'
+assert manifest.get(ns+'versionName')=='1.2' and manifest.get(ns+'versionCode')=='3'
 provenance=root/'SOURCE-SHA256.json'
 if provenance.exists():
  for name,expected in json.loads(provenance.read_text(encoding='utf-8')).items():
@@ -17,6 +17,10 @@ if original.exists():
 current=root/'release/realme-fullscreen-1.1.apk'
 if current.exists():
  assert hashlib.sha256(current.read_bytes()).hexdigest()=='8dbd32bb68c957c80ec97778b6015b78df27fac445ef1dacd22f194c7ff074a0','Release 1.1 APK changed'
+
+latest=root/'release/realme-fullscreen-1.2.apk'
+if latest.exists():
+ assert hashlib.sha256(latest.read_bytes()).hexdigest()=='baaa75a30cfca056a82a2c94e057c2d3f2b9e48395e82275872f37d8e7ae765d','Release 1.2 APK changed'
 
 def classes(data):
  assert data.startswith(b'dex\n')

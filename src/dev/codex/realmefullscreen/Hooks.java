@@ -22,6 +22,29 @@ public final class Hooks implements IXposedHookLoadPackage {
  private static volatile String topPackage="com.android.launcher";
  private static boolean frameworkInstalled,appsInstalled,systemUIInstalled;
  private static Boolean lastUiHidden;
+ private static final java.util.WeakHashMap<View,Object> touchAdapters=new java.util.WeakHashMap<>();
+ private static void installTouchAdapter(View bar,ClassLoader cl){
+  View root=bar.getRootView();if(touchAdapters.containsKey(root))return;
+  try{
+   Class<?> listener=XposedHelpers.findClass("android.view.ViewTreeObserver$OnComputeInternalInsetsListener",cl);
+   java.lang.ref.WeakReference<View> barRef=new java.lang.ref.WeakReference<>(bar);
+   Object adapter=java.lang.reflect.Proxy.newProxyInstance(listener.getClassLoader(),new Class<?>[]{listener},(proxy,method,args)->{
+    if(method.getName().equals("onComputeInternalInsets")){
+     View current=barRef.get();
+     if(current!=null&&uiHidden(current)){
+      Object info=args[0];XposedHelpers.callMethod(info,"setTouchableInsets",3);
+      ((android.graphics.Region)XposedHelpers.getObjectField(info,"touchableRegion")).setEmpty();
+     }
+     return null;
+    }
+    if(method.getName().equals("hashCode"))return System.identityHashCode(proxy);
+    if(method.getName().equals("equals"))return proxy==args[0];
+    return "RealmeFullscreen status touch adapter";
+   });
+   XposedHelpers.callMethod(root.getViewTreeObserver(),"addOnComputeInternalInsetsListener",adapter);
+   touchAdapters.put(root,adapter);root.requestLayout();
+  }catch(Throwable e){error("status touch adapter",e);}
+ }
  static void error(String phase,Throwable e){Log.e(TAG,phase,e);XposedBridge.log(TAG+": "+phase+" "+e);}
  static void hook(Class<?> c,String name,XC_MethodHook h){
   Set<XC_MethodHook.Unhook> found=XposedBridge.hookAllMethods(c,name,h);
@@ -122,7 +145,10 @@ public final class Hooks implements IXposedHookLoadPackage {
   Class<?> bar=XposedHelpers.findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView",cl);
   // Suppress rendering only: the native top-edge touch target stays intact.
   XposedHelpers.findAndHookMethod(android.view.ViewGroup.class,"dispatchDraw",Canvas.class,new XC_MethodHook(){@Override protected void beforeHookedMethod(MethodHookParam p){
-   if(bar.isInstance(p.thisObject)&&uiHidden((View)p.thisObject))p.setResult(null);
+   if(bar.isInstance(p.thisObject)){
+    installTouchAdapter((View)p.thisObject,cl);
+    if(uiHidden((View)p.thisObject))p.setResult(null);
+   }
   }});
   // QS/notification headers are separate from PhoneStatusBarView. Leave their
   // icons, clock and carrier rendering entirely under the native ROM lifecycle.

@@ -10,3 +10,6 @@ Source ZIP tùy chỉnh không kèm APK; tải APK riêng từ release. Source a
 
 
 Bản 1.1: realme-fullscreen-1.1.apk, cùng khóa ký với 1.0; SHA256 8dbd32bb68c957c80ec97778b6015b78df27fac445ef1dacd22f194c7ff074a0. Giữ APK 1.0 để đối chiếu lịch sử.
+
+
+APK 1.2 cùng khóa ký 1.0/1.1; SHA256 baaa75a30cfca056a82a2c94e057c2d3f2b9e48395e82275872f37d8e7ae765d.

@@ -24,11 +24,11 @@ jobs:
         shell: pwsh
         run: ./build.ps1
       - name: Verify source and APK class boundaries
-        run: python verify.py --apk build/realme-fullscreen-1.1.apk
+        run: python verify.py --apk build/realme-fullscreen-1.2.apk
       - name: Verify original release APK
-        run: python verify.py --apk release/realme-fullscreen-1.1.apk
+        run: python verify.py --apk release/realme-fullscreen-1.2.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: realme-fullscreen-1.1-ci
-          path: build/realme-fullscreen-1.1.apk
+          name: realme-fullscreen-1.2-ci
+          path: build/realme-fullscreen-1.2.apk
           if-no-files-found: error

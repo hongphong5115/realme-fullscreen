@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2 — 2026-11-16
+
+- Cho app nhận chạm trong vùng status bar đã ẩn; giữ vuốt mở thông báo qua native ROM.
+- Thêm log chạm trong ProbeActivity để kiểm tra DOWN/UP/CANCEL.
+- Kiểm tra dọc và hai chiều ngang; còn một lần vuốt ngay sau xoay không mở bảng. Xem TESTING.md.
+
 ## 1.1 — 2026-11-13
 
 - Khôi phục icon pin/sóng/Wi-Fi khi mở bảng thông báo hoặc Cài đặt nhanh.

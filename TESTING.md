@@ -63,3 +63,16 @@ APK SHA256: `be3cb7e2a77023becda8cf3cca2ebf73195c0617b08a9584eb831bca624a9bc8`.
 - Khởi động lại riêng SystemUI để nạp hook; không reboot máy. Hai lần restart SystemUI trong đợt này; chưa kiểm thử lại sau reboot hoặc ma trận ngang/Gboard vì hook framework/IME không đổi.
 - Không kiểm thử CTS/Gemini/Wallet hay thay đổi module Cử chỉ realme. Giới hạn kiểm thử bản 1.0 còn giữ nguyên; ảnh/log chỉ lưu cục bộ.
 - APK SHA256: 8dbd32bb68c957c80ec97778b6015b78df27fac445ef1dacd22f194c7ff074a0.
+
+
+## 1.2 — chạm xuyên vùng status bar (2026-11-16)
+
+Vấn đề: 1.1 chỉ ngừng vẽ icon; cửa sổ StatusBar vẫn giữ vùng chạm nên app không nhận được thao tác trong diện tích đã mở rộng.
+
+Thay đổi: thêm OnComputeInternalInsetsListener vào root riêng của PhoneStatusBarView. Khi uiHidden=true, đặt touchableInsets=REGION và touchableRegion rỗng. Khi không áp dụng/khóa màn hình, không sửa InternalInsetsInfo. Không đổi chiều cao hay flag cửa sổ, không thu vùng chạm của notification shade, không phát lại MotionEvent. Giữ bộ nhận vuốt native SystemGesturesPointerEventListener -> DisplayPolicy.requestTransientBars -> transferTouch. Đã đối chiếu DisplayPolicy và StatusBarWindowController từ artifact ROM. Proxy giữ weak reference tới bar; chỉ cài một lần/root. Chưa kiểm chứng trên ROM khác.
+
+Kiểm tra trên RMX3370 Android 13: build/sign/verify đạt; cài giữ dữ liệu thành công. Log Probe ghi DOWN/UP tại y=20,65 dọc; y=20 ngang 90/270, cả sau đóng bảng. Vuốt dọc và 270 gửi CANCEL cho app rồi mở notification shade, icon pin/sóng/Wi-Fi hiển thị. 90 độ một lần ngay sau xoay chưa mở; hai lần thử lại sau ổn định mở được. Không đủ mẫu để kết luận loại bỏ lỗi hiếm/ngay sau xoay. Ảnh và log lưu riêng trong test-results, không đưa vào source ZIP.
+
+Chỉ restart riêng SystemUI (hai lần trong đợt), không reboot hay test CTS/Gemini/Wallet. Chưa kiểm tra lại lockscreen/ngoại lệ/global off trên thiết bị cho bản 1.2; nhánh trả chính sách gốc giữ nguyên. Đã khôi phục cài đặt xoay, đóng shade và về Home.
+
+APK: realme-fullscreen-1.2.apk; SHA256 baaa75a30cfca056a82a2c94e057c2d3f2b9e48395e82275872f37d8e7ae765d. Mã nguồn và APK 1.2 nằm trong commit; chưa tạo GitHub Release 1.2.

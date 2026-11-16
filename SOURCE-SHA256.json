@@ -1,12 +1,12 @@
 {
-  "AndroidManifest.xml": "78b022145791e49bd74b87307ffdfd322cf4cf826dd917b3d22da37a0a4a38c9",
+  "AndroidManifest.xml": "1cf01459e6a64fe7d5b5e1f58d3b74d887ebc27381e030bc54ade2470ddd42d0",
   "assets/xposed_init": "dbae2321bf10810e094fa0d3835ab0b0951825bef6385b1e86234b986de9f659",
   "res/values/arrays.xml": "73a99c07c308b1a54530128a046a79fa2007865a43baba1c43b14230112aeddb",
   "src/dev/codex/realmefullscreen/Config.java": "df46af9d0ba7676408b4aee459e3f586b72fcd9d022d8e67f9a105473fb7e89e",
   "src/dev/codex/realmefullscreen/ConfigProvider.java": "26f06149b1cec6a412e69d57b72d9b5bd3fdf41e1e1f97037605bb4400fb0fbe",
-  "src/dev/codex/realmefullscreen/Hooks.java": "29d3e975071bbbf4b9d770090617fd3234cc38d205c4bfbc55290bc1c76c7e6f",
-  "src/dev/codex/realmefullscreen/MainActivity.java": "7c68c081925a27b904ab0be6c5e2bd06553ed13ae0a5f55f3813054c08192040",
-  "src/dev/codex/realmefullscreen/ProbeActivity.java": "3c24e2a4a142a21fc7805705a205efe60eb86521828a7540c9c993d14fbc051b",
+  "src/dev/codex/realmefullscreen/Hooks.java": "56642892685f93441f5fb539afb60b8de279a0e128d9162528baf9368bd73a82",
+  "src/dev/codex/realmefullscreen/MainActivity.java": "45ad6a8c767e1780668bc5051e56936de32158562020796b6e5ed6aff86a7194",
+  "src/dev/codex/realmefullscreen/ProbeActivity.java": "17718a99c3d001380d9ded91a1bd345337167fba00454da0d62a6629ca11ec9c",
   "src/dev/codex/realmefullscreen/ScopeTool.java": "d2745adf63c8fe6b57363b5da89a86a729f392a1bdbb997070c8c5239b77a046",
   "tools.lock.json": "224c7ee240a48a35af7c646230f0dcb0f56ab6d15bb88db026a136ff128e1793"
 }
