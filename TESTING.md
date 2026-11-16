@@ -1,4 +1,6 @@
-# Kết quả kiểm thử — 13/11/2026
+# Kết quả kiểm thử — lịch sử và bản 1.3
+
+Bản hiện tại: **1.3/code 5**. Kết quả 1.0–1.2 bên dưới giữ nguyên theo từng đợt; mục 1.3 ở cuối và [báo cáo chi tiết](CUTOUT-TOUCH-1.3.md) mô tả đợt mới nhất.
 
 Thiết bị realme RMX3370, Android 13 / SDK33, ROM RMX3370_13.1.0.601(CN01), APatch và LSPosed 1.9.2. Module độc lập `dev.codex.realmefullscreen` 1.0 / versionCode 1.
 
@@ -76,3 +78,25 @@ Kiểm tra trên RMX3370 Android 13: build/sign/verify đạt; cài giữ dữ l
 Chỉ restart riêng SystemUI (hai lần trong đợt), không reboot hay test CTS/Gemini/Wallet. Chưa kiểm tra lại lockscreen/ngoại lệ/global off trên thiết bị cho bản 1.2; nhánh trả chính sách gốc giữ nguyên. Đã khôi phục cài đặt xoay, đóng shade và về Home.
 
 APK: realme-fullscreen-1.2.apk; SHA256 baaa75a30cfca056a82a2c94e057c2d3f2b9e48395e82275872f37d8e7ae765d. Mã nguồn và APK 1.2 nằm trong commit; chưa tạo GitHub Release 1.2.
+
+
+## 1.3 — cảm ứng khi tràn camera ngang (2026-11-16)
+
+Nguyên nhân đã trace: Google LensCoordinatorLayout chặn chạm theo system-gesture insets còn chứa khoảng camera đã bỏ khỏi bố cục. Không phải lỗi ma trận xoay input; không sửa bằng offset MotionEvent. Module điều chỉnh đúng phần safe inset camera trong bản sao nguồn gesture của từng cửa sổ; giữ 90px cử chỉ thực và bottom gesture 96px trên máy đã kiểm tra.
+
+| Kiểm tra | Kết quả |
+|---|---|
+| CTS qua giữ pill và MiCTS, 90° và 270° | 12/12 lượt Close đúng tâm nút, cutout vẫn bật |
+| APK cuối sau reboot: ngang hai chiều và dọc | Thêm 3/3 lượt Close thành công |
+| Menu More Lens options phía camera, ngang 270° | Mở đúng popup, không thực hiện tác vụ trong menu |
+| App thử không có scope LSPosed client | Rộng 2400px, chạm x=40 và x=2360 đều được nhận ở hai chiều ngang |
+| Gboard ngang hai chiều | Rộng 2400px; adjustResize còn 432px; Q/P nhận đúng qp |
+| Gboard sát mép x=20 và x=2380 | qp ở cả hai chiều; tiếp tục đạt sau reboot cuối |
+| Build và ranh giới APK | apksigner verify và verify.py đạt; không còn trace Google, APK nghiên cứu, khóa ký hoặc DB trong bản bàn giao |
+| Build lại source công khai 1.3 | classes.dex, AndroidManifest.xml nhị phân và resources.arsc khớp byte với APK gốc; APK build lại dùng khóa tạm nên hash/chữ ký APK khác |
+
+Đã giữ thích nghi touch-region status bar của 1.2. Module Cử chỉ realme và APK Google/MiCTS không bị sửa trong đợt 1.3; dùng các đường mở CTS này để nghiệm thu sửa cutout. App thử độc lập đã gỡ sau kiểm tra. Thêm Google vào scope client qua LSPosed; framework vẫn được kiểm tra có tác dụng với app không có scope client.
+
+Không kiểm thử mọi app, mọi custom view, mọi thao tác khóa/xác thực, cửa sổ nổi/chia đôi hoặc stress nhiều giờ. Không kết luận sửa vĩnh viễn mọi lỗi CTS hay lỗi trợ lý. Ảnh/log và APK nghiên cứu chỉ giữ cục bộ; không công bố tại repo/release.
+
+APK SHA256: af5321e1334de31b908d5c3feacbdb4eb254fdbc1a116d1210afc3dca0493639.

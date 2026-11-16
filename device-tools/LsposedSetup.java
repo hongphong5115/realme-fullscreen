@@ -7,7 +7,7 @@ import java.io.FileWriter;
 public final class LsposedSetup {
  static final String PKG="dev.codex.realmefullscreen",DB="/data/adb/lspd/config/modules_config.db";
  static final String BACKUP="/data/adb/realme_fullscreen_backup_20261113";
- static final String[] SCOPES={"system","com.android.systemui","com.android.launcher","com.google.android.inputmethod.latin","com.android.chrome","com.android.settings","com.facebook.katana",PKG};
+ static final String[] SCOPES={"system","com.android.systemui","com.android.launcher","com.google.android.inputmethod.latin","com.android.chrome","com.android.settings","com.facebook.katana","com.google.android.googlequicksearchbox","com.parallelc.micts",PKG};
  public static void main(String[] args)throws Exception{
   if(android.os.Process.myUid()!=0)throw new SecurityException("root required");
   // Oplus assumes every SQLite caller UID owns an installed package; root does not.

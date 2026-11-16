@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3 — 2026-11-16
+
+- Đồng bộ gesture insets khi tràn camera ngang, sửa vùng chạm CTS/MiCTS bằng cơ chế chung ở framework.
+- Giữ vùng cử chỉ thực, navigation/IME và thích nghi status-bar touch-region của 1.2; không bù tọa độ hoặc sửa APK Google.
+- Màn hình thử hỗ trợ chọn hướng; thêm app thử độc lập và các script kiểm tra CTS/Gboard theo hướng màn hình.
+- Bỏ mã trace chẩn đoán khỏi APK cuối; công bố kết quả và giới hạn trong CUTOUT-TOUCH-1.3.md.
+- versionCode=5; APK gốc cùng chứng thư các bản trước.
+
 ## 1.2 — 2026-11-16
 
 - Cho app nhận chạm trong vùng status bar đã ẩn; giữ vuốt mở thông báo qua native ROM.

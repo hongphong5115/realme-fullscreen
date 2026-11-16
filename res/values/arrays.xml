@@ -2,4 +2,5 @@
  <item>android</item><item>com.android.systemui</item><item>com.android.launcher</item>
  <item>com.google.android.inputmethod.latin</item><item>com.android.chrome</item>
  <item>com.android.settings</item><item>com.facebook.katana</item><item>dev.codex.realmefullscreen</item>
+ <item>com.google.android.googlequicksearchbox</item><item>com.parallelc.micts</item>
 </string-array></resources>

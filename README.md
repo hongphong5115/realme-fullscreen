@@ -1,12 +1,18 @@
-# Ẩn thanh trạng thái realme 1.2
+# Ẩn thanh trạng thái realme 1.3
 
 [![Build APK](https://github.com/hongphong5115/realme-fullscreen/actions/workflows/build.yml/badge.svg)](https://github.com/hongphong5115/realme-fullscreen/actions/workflows/build.yml)
 
-[Tải APK và source ZIP](https://github.com/hongphong5115/realme-fullscreen/blob/main/release/realme-fullscreen-1.2.apk) · [Kết quả kiểm thử](TESTING.md) · [Báo lỗi](https://github.com/hongphong5115/realme-fullscreen/issues)
+[Tải APK và source ZIP](https://github.com/hongphong5115/realme-fullscreen/blob/main/release/realme-fullscreen-1.3.apk) · [Kết quả kiểm thử](TESTING.md) · [Báo lỗi](https://github.com/hongphong5115/realme-fullscreen/issues)
 
-Module LSPosed độc lập, package `dev.codex.realmefullscreen`, dành cho realme RMX3370 Android 13 / RMX3370_13.1.2.601(CN01). Không sửa hoặc phụ thuộc [Cử chỉ realme](https://github.com/hongphong5115/realme-gestures).
+Module LSPosed độc lập, package `dev.codex.realmefullscreen`, dành cho realme RMX3370 Android 13 / RMX3370_13.1.3.601(CN01). Không sửa hoặc phụ thuộc [Cử chỉ realme](https://github.com/hongphong5115/realme-gestures).
 
 **Chưa nghiệm thu đầy đủ mọi app, cửa sổ nổi/chia đôi và hộp thoại xác thực.** Xem TESTING.md trước khi cài; không coi build CI thành công là đã kiểm thử điện thoại. Module không sửa burn-in đã có.
+
+## Bản 1.3 — giữ cảm ứng khi tràn camera
+
+Đồng bộ side-system-gesture insets với phần diện tích camera đã mở rộng. Trên ROM đã kiểm tra, dải 200px trở về 90px cử chỉ thực; bỏ phần 110px khoảng camera thừa làm Google CTS nuốt chạm nút Close. Sửa ở framework theo hình học cutout, giữ tràn camera và giữ bộ nhận cử chỉ native, không có ngoại lệ riêng CTS/MiCTS.
+
+Đã kiểm tra 15/15 lượt đóng CTS, gồm hai chiều ngang, dọc và sau reboot; mở qua giữ pill và MiCTS. App thử ngoài scope client nhận chạm sát hai mép; Gboard phủ đủ chiều rộng và gõ được phím sát biên. Không coi số lượt này là bảo đảm mọi app hoặc lỗi hiếm dài ngày. [Cơ chế, kết quả và giới hạn 1.3](CUTOUT-TOUCH-1.3.md).
 
 ## Vấn đề và giải pháp
 
@@ -25,7 +31,7 @@ Luồng cấu hình: UI → SharedPreferences private → ContentProvider chỉ 
 
 ## Cài đặt và cấu hình
 
-1. Cài `realme-fullscreen-1.2.apk`. Bật module trong LSPosed.
+1. Cài `realme-fullscreen-1.3.apk`. Bật module trong LSPosed.
 2. Chọn **System Framework**, **SystemUI**, **Launcher hệ thống**, **Gboard**, chính module này và các app cần thích nghi client (Chrome, Facebook, Cài đặt…).
 3. Tắt adapter tràn viền cũ để tránh hai bộ hook sửa cùng cửa sổ. Không xóa APK/cấu hình cũ.
 4. Reboot, mở module để khởi tạo công tắc. Mặc định enabled/hide/cutout đều bật.
@@ -44,14 +50,14 @@ git clone https://github.com/hongphong5115/realme-fullscreen.git
 cd realme-fullscreen
 ./bootstrap.ps1
 ./build.ps1
-python verify.py --apk build/realme-fullscreen-1.2.apk
+python verify.py --apk build/realme-fullscreen-1.3.apk
 ```
 
-Đầu ra: `build/realme-fullscreen-1.2.apk`. Có thể chỉ định `-ToolsDirectory` đến cache toolchain đã có; không cần source hoặc APK của module nào khác. Khóa ký riêng và mật khẩu ngẫu nhiên nằm trong `.local/`, không chia sẻ hoặc đóng gói. Giữ chúng để ký bản cập nhật. Build fail nếu javac/D8/aapt2/zipalign/apksigner lỗi. Tài sản giấy phép R8 nằm trong assets.
+Đầu ra: `build/realme-fullscreen-1.3.apk`. Có thể chỉ định `-ToolsDirectory` đến cache toolchain đã có; không cần source hoặc APK của module nào khác. Khóa ký riêng và mật khẩu ngẫu nhiên nằm trong `.local/`, không chia sẻ hoặc đóng gói. Giữ chúng để ký bản cập nhật. Build fail nếu javac/D8/aapt2/zipalign/apksigner lỗi. Tài sản giấy phép R8 nằm trong assets.
 
-APK gốc đã kiểm tra nằm ở release/ và GitHub Release. CI tự build với khóa tạm và upload artifact `realme-fullscreen-1.2-ci`; **khác chữ ký APK gốc**, không cập nhật đè trực tiếp được. CI không giữ hoặc công bố khóa ký release.
+APK gốc đã kiểm tra nằm ở release/ và GitHub Release. CI tự build với khóa tạm và upload artifact `realme-fullscreen-1.3-ci`; **khác chữ ký APK gốc**, không cập nhật đè trực tiếp được. CI không giữ hoặc công bố khóa ký release.
 
-Để đóng gói source: `python package-source.py realme-fullscreen-1.2-source.zip`. Source ZIP có manifest SHA256 từng file, bỏ tools/build/.local/research/test-results và APK. Repository giữ APK gốc riêng trong release/ để đối chiếu. Công bố theo Apache-2.0; xem LICENSE, NOTICE và giấy phép R8 trong assets.
+Source ZIP có cả workflow CI. Để đóng gói source: `python package-source.py realme-fullscreen-1.3-source.zip`. Source ZIP có manifest SHA256 từng file, bỏ tools/build/.local/research/test-results và APK. Repository giữ APK gốc riêng trong release/ để đối chiếu. Công bố theo Apache-2.0; xem LICENSE, NOTICE và giấy phép R8 trong assets.
 
 ## Chẩn đoán và hoàn tác
 
@@ -77,6 +83,6 @@ Nếu không boot vào Android, vô hiệu hóa LSPosed/APatch theo cơ chế kh
 - [Android: hide system bars](https://developer.android.com/develop/ui/views/layout/immersive)
 - [Android: display cutout](https://developer.android.com/develop/ui/views/layout/display-cutout)
 
-Không có cách tự động bảo đảm mọi app tự viết padding/header đều tràn kín. Không ép cửa sổ nổi/chia đôi màn hình thành fullscreen. Module không sửa burn-in đã có. Xem `TESTING.md` để biết trạng thái nghiệm thu thực tế; cử chỉ/CTS/Gemini/Wallet không thuộc đợt kiểm thử này.
+Không có cách tự động bảo đảm mọi app tự viết padding/header đều tràn kín. Không ép cửa sổ nổi/chia đôi màn hình thành fullscreen. Module không sửa burn-in đã có. Xem `TESTING.md` để biết trạng thái nghiệm thu thực tế; CTS/MiCTS có kiểm thử riêng trong bản 1.3; các kết quả cũ và chức năng chưa kiểm tra được ghi tách trong TESTING.md.
 
-Bản 1.2: status bar đang ẩn cho app nhận chạm qua vùng đó; vuốt mép trên dùng cơ chế native ROM. Một lần vuốt ngay sau xoay 90° chưa mở bảng; xem TESTING.md.
+Kế thừa bản 1.2: status bar đang ẩn cho app nhận chạm qua vùng đó; vuốt mép trên dùng cơ chế native ROM. Một lần vuốt ngay sau xoay 90° chưa mở bảng; xem TESTING.md.

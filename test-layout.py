@@ -19,7 +19,7 @@ old_auto=shell('settings','get','system','accelerometer_rotation').strip();old_r
 record={'rotation':a.rotation,'label':a.label}
 try:
  shell('settings','put','system','accelerometer_rotation','0');shell('settings','put','system','user_rotation',str(a.rotation))
- shell('am','force-stop','dev.codex.realmefullscreen');shell('am','start','-n','dev.codex.realmefullscreen/.ProbeActivity');time.sleep(2)
+ shell('am','start','-f','0x10008000','-n','dev.codex.realmefullscreen/.ProbeActivity','--ei','rotation',str(a.rotation));time.sleep(2)
  ui=capture(f'{a.label}-{a.rotation}-content')
  record['content']=[n.get('text') for n in ui.iter('node') if n.get('text','').startswith('Content x=')]
  inputs=[n for n in ui.iter('node') if n.get('content-desc')=='fullscreen-test-input']

@@ -23,26 +23,21 @@ public final class Hooks implements IXposedHookLoadPackage {
  private static boolean frameworkInstalled,appsInstalled,systemUIInstalled;
  private static Boolean lastUiHidden;
  private static final java.util.WeakHashMap<View,Object> touchAdapters=new java.util.WeakHashMap<>();
- private static void installTouchAdapter(View bar,ClassLoader cl){
-  View root=bar.getRootView();if(touchAdapters.containsKey(root))return;
+ private static void installTouchAdapter(View v,ClassLoader cl){
+  View root=v.getRootView();if(touchAdapters.containsKey(root))return;
   try{
-   Class<?> listener=XposedHelpers.findClass("android.view.ViewTreeObserver$OnComputeInternalInsetsListener",cl);
-   java.lang.ref.WeakReference<View> barRef=new java.lang.ref.WeakReference<>(bar);
-   Object adapter=java.lang.reflect.Proxy.newProxyInstance(listener.getClassLoader(),new Class<?>[]{listener},(proxy,method,args)->{
+   Class<?> type=XposedHelpers.findClass("android.view.ViewTreeObserver$OnComputeInternalInsetsListener",cl);
+   java.lang.ref.WeakReference<View> ref=new java.lang.ref.WeakReference<>(v);
+   Object listener=java.lang.reflect.Proxy.newProxyInstance(type.getClassLoader(),new Class[]{type},(proxy,method,args)->{
     if(method.getName().equals("onComputeInternalInsets")){
-     View current=barRef.get();
-     if(current!=null&&uiHidden(current)){
-      Object info=args[0];XposedHelpers.callMethod(info,"setTouchableInsets",3);
-      ((android.graphics.Region)XposedHelpers.getObjectField(info,"touchableRegion")).setEmpty();
-     }
-     return null;
+     View view=ref.get();if(view!=null&&uiHidden(view)){XposedHelpers.callMethod(args[0],"setTouchableInsets",3);((android.graphics.Region)XposedHelpers.getObjectField(args[0],"touchableRegion")).setEmpty();}return null;
     }
     if(method.getName().equals("hashCode"))return System.identityHashCode(proxy);
     if(method.getName().equals("equals"))return proxy==args[0];
     return "RealmeFullscreen status touch adapter";
    });
-   XposedHelpers.callMethod(root.getViewTreeObserver(),"addOnComputeInternalInsetsListener",adapter);
-   touchAdapters.put(root,adapter);root.requestLayout();
+   XposedHelpers.callMethod(root.getViewTreeObserver(),"addOnComputeInternalInsetsListener",listener);
+   touchAdapters.put(root,listener);root.requestLayout();
   }catch(Throwable e){error("status touch adapter",e);}
  }
  static void error(String phase,Throwable e){Log.e(TAG,phase,e);XposedBridge.log(TAG+": "+phase+" "+e);}
@@ -83,11 +78,37 @@ public final class Hooks implements IXposedHookLoadPackage {
   // SDK33 InsetsState uses internal status type 0. Navigation/IME/gesture sources survive.
   if(hide)XposedHelpers.callMethod(copy,"removeSource",0);
   if(cutout){
+   rebaseSideGestures(copy);
    Object noCutout=XposedHelpers.getStaticObjectField(cutoutClass,"NO_CUTOUT");
    XposedHelpers.callMethod(copy,"setDisplayCutout",noCutout);
    for(int type=11;type<=14;type++)XposedHelpers.callMethod(copy,"removeSource",type);
   }
   return copy;
+ }
+ /** Layout has removed the camera safe margin. Side gesture sources also carry
+  * that margin on Oplus; retain the real gesture width instead of the dead strip.
+  * Work only on the per-window deep copy, never on the display's native sources.
+  */
+ static void rebaseSideGestures(Object copy){
+  android.graphics.Rect display=(android.graphics.Rect)XposedHelpers.callMethod(copy,"getDisplayFrame");
+  if(display.width()<=display.height())return;
+  android.view.DisplayCutout physical=(android.view.DisplayCutout)XposedHelpers.callMethod(copy,"getDisplayCutout");
+  if(physical==null)return;
+  int left=physical.getSafeInsetLeft(),right=physical.getSafeInsetRight();
+  if(left==0&&right==0)return;
+  String[] names={"ITYPE_LEFT_GESTURES","ITYPE_RIGHT_GESTURES","ITYPE_LEFT_MANDATORY_GESTURES","ITYPE_RIGHT_MANDATORY_GESTURES"};
+  for(int i=0;i<names.length;i++){
+   int type=XposedHelpers.getStaticIntField(stateClass,names[i]);
+   Object source=XposedHelpers.callMethod(copy,"peekSource",type);if(source==null)continue;
+   android.graphics.Rect frame=new android.graphics.Rect((android.graphics.Rect)XposedHelpers.callMethod(source,"getFrame"));
+   if(frame.isEmpty())continue;
+   if((i&1)==0&&left>0&&frame.left<=display.left&&frame.right>display.left){
+    frame.right=Math.max(frame.left,frame.right-left);
+   }else if((i&1)==1&&right>0&&frame.right>=display.right&&frame.left<display.right){
+    frame.left=Math.min(frame.right,frame.left+right);
+   }else continue;
+   XposedHelpers.callMethod(source,"setFrame",frame);
+  }
  }
  @Override public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lp){
   if(Build.VERSION.SDK_INT!=33){XposedBridge.log(TAG+": unsupported SDK; hooks skipped");return;}
@@ -145,10 +166,7 @@ public final class Hooks implements IXposedHookLoadPackage {
   Class<?> bar=XposedHelpers.findClass("com.android.systemui.statusbar.phone.PhoneStatusBarView",cl);
   // Suppress rendering only: the native top-edge touch target stays intact.
   XposedHelpers.findAndHookMethod(android.view.ViewGroup.class,"dispatchDraw",Canvas.class,new XC_MethodHook(){@Override protected void beforeHookedMethod(MethodHookParam p){
-   if(bar.isInstance(p.thisObject)){
-    installTouchAdapter((View)p.thisObject,cl);
-    if(uiHidden((View)p.thisObject))p.setResult(null);
-   }
+   if(bar.isInstance(p.thisObject)){installTouchAdapter((View)p.thisObject,cl);if(uiHidden((View)p.thisObject))p.setResult(null);}
   }});
   // QS/notification headers are separate from PhoneStatusBarView. Leave their
   // icons, clock and carrier rendering entirely under the native ROM lifecycle.

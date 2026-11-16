@@ -13,3 +13,6 @@ Bản 1.1: realme-fullscreen-1.1.apk, cùng khóa ký với 1.0; SHA256 8dbd32bb
 
 
 APK 1.2 cùng khóa ký 1.0/1.1; SHA256 baaa75a30cfca056a82a2c94e057c2d3f2b9e48395e82275872f37d8e7ae765d.
+
+
+APK 1.3 cùng chứng thư ký với các bản trước; SHA256 af5321e1334de31b908d5c3feacbdb4eb254fdbc1a116d1210afc3dca0493639. Cơ chế sửa/kiểm thử trong [CUTOUT-TOUCH-1.3.md](../CUTOUT-TOUCH-1.3.md).
